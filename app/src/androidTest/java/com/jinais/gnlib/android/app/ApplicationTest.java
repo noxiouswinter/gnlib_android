@@ -1,4 +1,4 @@
-package com.jinais.demoapp.gnlibandroid.app;
+package com.jinais.gnlib.android.app;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

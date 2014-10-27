@@ -17,7 +17,7 @@ android {
     buildToolsVersion "21.0.1"
 
     defaultConfig {
-        applicationId "com.jinais.demoapp.gnlibandroid.app"
+        applicationId "com.jinais.gnlib.android.app"
         minSdkVersion 9
         targetSdkVersion 21
         versionCode 1
