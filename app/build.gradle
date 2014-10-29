@@ -14,11 +14,11 @@ repositories {
 
 android {
     compileSdkVersion 21
-    buildToolsVersion "21.0.1"
+    buildToolsVersion '21.0.1'
 
     defaultConfig {
         applicationId "com.jinais.gnlib.android.app"
-        minSdkVersion 9
+        minSdkVersion 10
         targetSdkVersion 21
         versionCode 1
         versionName "1.0"
@@ -33,6 +33,7 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile project(':gnlib_android')
     compile 'com.android.support:support-v4:21.0.0'
     compile 'com.android.support:appcompat-v7:21.0.0'
     compile 'com.android.support:gridlayout-v7:21.0.0'

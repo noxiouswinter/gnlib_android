@@ -2,7 +2,7 @@ package com.jinais.gnlib.android;
 
 import android.util.Log;
 
-public class LogM {
+public class LogGN {
 	
 	private static String DEBUG_LOG_SIGNATURE = "DEBUG";
 	private static String ERROR_LOG_SIGNATURE = "ERROR";

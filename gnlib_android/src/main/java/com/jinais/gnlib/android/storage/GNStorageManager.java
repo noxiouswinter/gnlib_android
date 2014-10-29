@@ -4,7 +4,9 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.jinais.gnlib.android.LogM;
+import com.google.gson.JsonSyntaxException;
+import com.jinais.gnlib.android.LogGN;
+
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +21,7 @@ public class GNStorageManager {
     @GNState
     private ArrayList<StatePersistenceInfo> statePersistenceInfos = null;
 
+    /** Get Singleton */
     public static GNStorageManager init(Context context) {
 
         if(sharedInstance == null) {
@@ -29,24 +32,24 @@ public class GNStorageManager {
 
             return getSharedInstance();
         } else {
-            LogM.e("GNStorageManager already init. Use get to get the singleton.");
+            LogGN.e("GNStorageManager already init. Use get to get the singleton.");
             return null;
         }
     }
 
     public static GNStorageManager getSharedInstance() {
         if(sharedInstance == null) {
-            LogM.e("GNStorageManager: Call init with context first.");
+            LogGN.e("GNStorageManager: Call init with context first.");
             return null;
         }
         return sharedInstance;
     }
 
-    //private Constructor
+    /** Private Constructor */
     private GNStorageManager(Context context) {
         this.context = context;
         this.applicationId = context.getApplicationContext().getPackageName();
-        statePersistenceInfos = new ArrayList<>();
+        statePersistenceInfos = new ArrayList<StatePersistenceInfo>();
     }
     
     /** Jsonify the object and store in SharedPreferences with the Object's class name. */
@@ -62,7 +65,7 @@ public class GNStorageManager {
 
         //Store the state of GNStorageManager if StatePersistenceInfos was modified.
         if(addToStatePersistenceInfos(objectClass.getCanonicalName())) {
-            getSharedInstance().store(getSharedInstance());
+            store(this);
         }
     }
 
@@ -88,8 +91,13 @@ public class GNStorageManager {
 
     /** Get the JSON from SharedPreferences with the Object's class name. Create a dummy object and copy all the
      Jsonified values to the original object. */
-    public void retrieve(Object object) {
-        Class objectClass = object.getClass();
+    public void retrieve(Object objectToRetrieve) {
+        if(objectToRetrieve == null) {
+            LogGN.e("Object to retrieve is null!");
+            return;
+        }
+
+        Class objectClass = objectToRetrieve.getClass();
         String objectClassCanonicalName = objectClass.getCanonicalName();
 
 		SharedPreferences sharedPreferences = context.getSharedPreferences(applicationId, Context.MODE_PRIVATE);
@@ -97,18 +105,24 @@ public class GNStorageManager {
         if(jsonString.equals("")) return;
 
         Gson gson = new Gson();
-        Object duplicateObject = gson.fromJson(jsonString, objectClass);
+        Object duplicateObject;
+        try {
+            duplicateObject = gson.fromJson(jsonString, objectClass);
+        } catch (JsonSyntaxException e) {
+            LogGN.e(e, "Failed to parse Json String: ", jsonString);
+            return;
+        }
 
         try {
-            copyObjectAnnotatedFields(duplicateObject, object);
+            copyObjectAnnotatedFields(duplicateObject, objectToRetrieve);
         } catch (IllegalAccessException e) {
-            LogM.e(e);
+            LogGN.e(e);
         }
     }
 
     /** Clear all GNStorageManager's data from SharedPreferences. */
-    public void clearAll() {
-        context.getSharedPreferences(applicationId, Context.MODE_PRIVATE).edit().clear().commit();
+    public void resetGNStorageManager() {
+        context.getSharedPreferences(applicationId, Context.MODE_PRIVATE).edit().clear().apply();
     }
 
     /** Remove data of provided object's class from GNStorageManager and the SharedPrefs entries. */
@@ -120,12 +134,12 @@ public class GNStorageManager {
         if(indexInStatePersistenceInfos != -1) {
 
             SharedPreferences sharedPreferences = context.getSharedPreferences(applicationId, Context.MODE_PRIVATE);
-            sharedPreferences.edit().remove(componentClassCanonicalName).commit();
+            sharedPreferences.edit().remove(componentClassCanonicalName).apply();
             statePersistenceInfos.remove(indexInStatePersistenceInfos);
-            store(getSharedInstance());
+            store(this);
 
         } else {
-            LogM.d("StorageManager.remove: ", componentClass.getCanonicalName(), " is not present in statePersistenceInfos");
+            LogGN.d("StorageManager.remove: ", componentClass.getCanonicalName(), " is not present in statePersistenceInfos");
         }
     }
 
@@ -141,18 +155,53 @@ public class GNStorageManager {
      * be marked with the annotation too.*/
     private void copyObjectAnnotatedFields(Object objectToCopyFrom, Object objectToCopyTo) throws IllegalAccessException {
 
-        Class classOfObjectToCopyFrom = objectToCopyFrom.getClass();
-        if(!classOfObjectToCopyFrom.equals(objectToCopyTo.getClass())) {
-            LogM.e("Classes of Objects to copy does not match.");
+        if(objectToCopyFrom == null) {
+            LogGN.e("objectToCopyFrom is null!");
             return;
         }
 
+        Class classOfObjectToCopyFrom = objectToCopyFrom.getClass();
+
+        if(objectToCopyTo == null) {
+            LogGN.d("objectToCopyTo is null! Instantiating with Type: ", classOfObjectToCopyFrom.getCanonicalName());
+            try {
+                objectToCopyTo = classOfObjectToCopyFrom.newInstance();
+                //Set this object as the field of the parent object.
+            } catch (InstantiationException e) {
+                LogGN.e(e, "Failed to instantiate class: ", classOfObjectToCopyFrom.getCanonicalName());
+                return;
+            }
+        }
+
         for(Field field: classOfObjectToCopyFrom.getDeclaredFields()) {
+
+            //If Field is annotated with GNState,
             if(field.getAnnotation(GNState.class) != null) {
 
                 //If class(Type) of field is marked with GNState annotation, drill down.
                 if(field.getType().getAnnotation(GNState.class) != null) {
+                    //Override field access restrictions
+                    field.setAccessible(true);
+
+                    //If the field is null, instantiate an object of it's class and assign the field with it.
+                    if(field.get(objectToCopyTo) == null) {
+                        LogGN.d("Field ", field.getName(), " is null. Instantiating..");
+                        Object newFieldObject;
+                        try {
+                            newFieldObject = field.getType().newInstance();
+                        } catch (InstantiationException e) {
+                            LogGN.e(e, "Instantiation of Field Type ", field.getType(), " for field ", field.getName(), " failed!");
+                            return;
+                        }
+                        if(newFieldObject != null) {
+                            field.set(objectToCopyTo, newFieldObject);
+                        }
+                    }
+                    //Recurse.
                     copyObjectAnnotatedFields(field.get(objectToCopyFrom), field.get(objectToCopyTo));
+                    //Put back access restrictions for the field.
+                    field.setAccessible(false);
+
                 } else { //Else Just copy the reference
                     field.setAccessible(true);
                     Object fieldObjectToCopyFrom = field.get(objectToCopyFrom);

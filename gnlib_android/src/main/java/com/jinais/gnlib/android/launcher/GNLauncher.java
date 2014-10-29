@@ -2,7 +2,8 @@ package com.jinais.gnlib.android.launcher;
 
 import android.content.Context;
 import android.content.Intent;
-import com.jinais.gnlib.android.LogM;
+import com.jinais.gnlib.android.LogGN;
+
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -33,15 +34,15 @@ public class GNLauncher {
         return Proxy.newProxyInstance(activityInterfaceClass.getClassLoader(), new Class<?>[]{activityInterfaceClass}, this.customInvocationHandler);
     }
 
-    public void handOver(Context activityObject) {
+    public void ping(Context activityObject) {
         if (activityObject.getClass().equals(this.customInvocationHandler.getActivityClass())) {
             try {
                 Object result = this.customInvocationHandler.getMethod().invoke(activityObject, this.customInvocationHandler.getArgs());
                 clearCachedLaunchData();
             } catch (IllegalAccessException e) {
-                LogM.e(e);
+                LogGN.e(e);
             } catch (InvocationTargetException e) {
-                LogM.e(e);
+                LogGN.e(e);
             }
         }
     }
