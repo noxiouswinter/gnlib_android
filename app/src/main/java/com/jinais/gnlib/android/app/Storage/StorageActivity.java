@@ -24,9 +24,10 @@ public class StorageActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initializeViews();
+        LogGN.d("ON CREATE");
 
         GNStorageManager.init(this);
-        GNStorageManager.getSharedInstance().retrieve(this);
+        GNStorageManager.get().retrieve(this);
 
         if(this.studentInfo != null) {
             setGreetingTextFromStudentInfo();
@@ -37,7 +38,8 @@ public class StorageActivity extends Activity {
 
     @Override
     protected void onPause() {
-        GNStorageManager.getSharedInstance().store(this);
+        LogGN.d("ON PAUSE");
+        GNStorageManager.get().store(this);
         super.onPause();
     }
 
@@ -71,6 +73,14 @@ public class StorageActivity extends Activity {
             return;
         }
         tvGreetingText.setText("Hello " + this.studentInfo.name + "! \nYour age is: " + this.studentInfo.age);
+    }
+
+    public StudentInfo getStudentInfo() {
+        return studentInfo;
+    }
+
+    public void setStudentInfo(StudentInfo studentInfo) {
+        this.studentInfo = studentInfo;
     }
 
     @GNState

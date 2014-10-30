@@ -6,7 +6,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 import com.jinais.gnlib.android.LogGN;
-
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,16 +27,16 @@ public class GNStorageManager {
             sharedInstance = new GNStorageManager(context);
 
             //Retrieve the state of GNStorageManager
-            getSharedInstance().retrieve(getSharedInstance());
+            get().retrieve(get());
 
-            return getSharedInstance();
+            return get();
         } else {
             LogGN.e("GNStorageManager already init. Use get to get the singleton.");
             return null;
         }
     }
 
-    public static GNStorageManager getSharedInstance() {
+    public static GNStorageManager get() {
         if(sharedInstance == null) {
             LogGN.e("GNStorageManager: Call init with context first.");
             return null;
@@ -121,7 +120,7 @@ public class GNStorageManager {
     }
 
     /** Clear all GNStorageManager's data from SharedPreferences. */
-    public void resetGNStorageManager() {
+    public void resetAppData() {
         context.getSharedPreferences(applicationId, Context.MODE_PRIVATE).edit().clear().apply();
     }
 
@@ -160,21 +159,7 @@ public class GNStorageManager {
             return;
         }
 
-        Class classOfObjectToCopyFrom = objectToCopyFrom.getClass();
-
-        if(objectToCopyTo == null) {
-            LogGN.d("objectToCopyTo is null! Instantiating with Type: ", classOfObjectToCopyFrom.getCanonicalName());
-            try {
-                objectToCopyTo = classOfObjectToCopyFrom.newInstance();
-                //Set this object as the field of the parent object.
-            } catch (InstantiationException e) {
-                LogGN.e(e, "Failed to instantiate class: ", classOfObjectToCopyFrom.getCanonicalName());
-                return;
-            }
-        }
-
-        for(Field field: classOfObjectToCopyFrom.getDeclaredFields()) {
-
+        for(Field field: objectToCopyFrom.getClass().getDeclaredFields()) {
             //If Field is annotated with GNState,
             if(field.getAnnotation(GNState.class) != null) {
 
