@@ -10,10 +10,10 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GNStorageManager {
+public class GNStateManager {
 
     //Singleton Instance
-    private static GNStorageManager sharedInstance = null;
+    private static GNStateManager sharedInstance = null;
     private final Context context;
     private final String applicationId;
 
@@ -21,10 +21,10 @@ public class GNStorageManager {
     private ArrayList<StatePersistenceInfo> statePersistenceInfos = null;
 
     /** Get Singleton */
-    public static GNStorageManager init(Context context) {
+    public static GNStateManager init(Context context) {
 
         if(sharedInstance == null) {
-            sharedInstance = new GNStorageManager(context);
+            sharedInstance = new GNStateManager(context);
 
             //Retrieve the state of GNStorageManager
             get().retrieve(get());
@@ -36,7 +36,7 @@ public class GNStorageManager {
         }
     }
 
-    public static GNStorageManager get() {
+    public static GNStateManager get() {
         if(sharedInstance == null) {
             LogGN.e("GNStorageManager: Call init with context first.");
             return null;
@@ -45,7 +45,7 @@ public class GNStorageManager {
     }
 
     /** Private Constructor */
-    private GNStorageManager(Context context) {
+    private GNStateManager(Context context) {
         this.context = context;
         this.applicationId = context.getApplicationContext().getPackageName();
         statePersistenceInfos = new ArrayList<StatePersistenceInfo>();

@@ -8,7 +8,7 @@ import android.widget.TextView;
 import com.jinais.gnlib.android.LogGN;
 import com.jinais.gnlib.android.app.R;
 import com.jinais.gnlib.android.storage.GNState;
-import com.jinais.gnlib.android.storage.GNStorageManager;
+import com.jinais.gnlib.android.storage.GNStateManager;
 
 
 public class StorageActivity extends Activity {
@@ -26,8 +26,8 @@ public class StorageActivity extends Activity {
         initializeViews();
         LogGN.d("ON CREATE");
 
-        GNStorageManager.init(this);
-        GNStorageManager.get().retrieve(this);
+        GNStateManager.init(this);
+        GNStateManager.get().retrieve(this);
 
         if(this.studentInfo != null) {
             setGreetingTextFromStudentInfo();
@@ -39,7 +39,7 @@ public class StorageActivity extends Activity {
     @Override
     protected void onPause() {
         LogGN.d("ON PAUSE");
-        GNStorageManager.get().store(this);
+        GNStateManager.get().store(this);
         super.onPause();
     }
 

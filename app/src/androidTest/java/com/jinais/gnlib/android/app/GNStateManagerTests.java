@@ -1,32 +1,31 @@
 package com.jinais.gnlib.android.app;
 
 import android.test.ActivityInstrumentationTestCase2;
-import com.jinais.gnlib.android.LogGN;
 import com.jinais.gnlib.android.app.Storage.StorageActivity;
-import com.jinais.gnlib.android.storage.GNStorageManager;
+import com.jinais.gnlib.android.storage.GNStateManager;
 
 /**
  * Created by jkader on 10/29/14.
  */
-public class StorageTest extends ActivityInstrumentationTestCase2<StorageActivity> {
+public class GNStateManagerTests extends ActivityInstrumentationTestCase2<StorageActivity> {
 
     StorageActivity storageActivity;
 
-    public StorageTest() {super(StorageActivity.class);}
+    public GNStateManagerTests() {super(StorageActivity.class);}
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
     }
 
-    public void testStorage() {
+    public void testStorageAndRetrieval() {
 
         //Start Activity.
         storageActivity = getActivity();
         assertNotNull(storageActivity);
 
         //Reset all application entries
-        GNStorageManager.get().resetAppData();
+        GNStateManager.get().resetAppData();
 
         StorageActivity.StudentInfo studentInfo = new StorageActivity.StudentInfo();
         studentInfo.name = "abcd";
@@ -46,6 +45,6 @@ public class StorageTest extends ActivityInstrumentationTestCase2<StorageActivit
         assertEquals(25, studentInfo.age);
 
         //Reset all application entries
-        GNStorageManager.get().resetAppData();
+        GNStateManager.get().resetAppData();
     }
 }
