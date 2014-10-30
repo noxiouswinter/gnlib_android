@@ -31,7 +31,7 @@ public class GNStateManager {
 
             return get();
         } else {
-            LogGN.e("GNStorageManager already init. Use get to get the singleton.");
+            LogGN.e("GNStorageManager already init. Use get() to get the singleton.");
             return null;
         }
     }

@@ -7,11 +7,11 @@ import com.jinais.gnlib.android.storage.GNStateManager;
 /**
  * Created by jkader on 10/29/14.
  */
-public class GNStateManagerTests extends ActivityInstrumentationTestCase2<StorageActivity> {
+public class GNStateManagerTest extends ActivityInstrumentationTestCase2<StorageActivity> {
 
     StorageActivity storageActivity;
 
-    public GNStateManagerTests() {super(StorageActivity.class);}
+    public GNStateManagerTest() {super(StorageActivity.class);}
 
     @Override
     protected void setUp() throws Exception {
