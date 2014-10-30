@@ -14,11 +14,8 @@
  * limitations under the License.
  */
 
-package com.jinais.gnlib.android;
+package com.jinais.gnlib.android.app.Launcher;
 
-public class Values {
-	
-	public static final boolean PATHS = false;
-	public static final boolean DEBUG = true;
-	public static final boolean TEST = DEBUG;
+public interface IPayload {
+    public void sayHello(String name, int age);
 }
