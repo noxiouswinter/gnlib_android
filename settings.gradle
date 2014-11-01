@@ -14,4 +14,4 @@
  * limitations under the License.
  */
 
-include ':app', ':gnlib_android'
+include ':app', ':gnlib-android'
