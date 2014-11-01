@@ -18,7 +18,9 @@ package com.jinais.gnlib.android.app;
 
 import android.test.ActivityInstrumentationTestCase2;
 import com.jinais.gnlib.android.app.Storage.StorageActivity;
+import com.jinais.gnlib.android.storage.GNState;
 import com.jinais.gnlib.android.storage.GNStateManager;
+import com.jinais.gnlib.android.storage.GNStateManagerFactory;
 
 /**
  * Created by jkader on 10/29/14.
@@ -40,8 +42,12 @@ public class GNStateManagerTest extends ActivityInstrumentationTestCase2<Storage
         storageActivity = getActivity();
         assertNotNull(storageActivity);
 
+        //GNStateManagerFactory.init(context) will be called in OnCreate of storageActivity
+        GNStateManager gnStateManager = GNStateManagerFactory.get();
+        assertNotNull(gnStateManager);
+
         //Reset all application entries
-        GNStateManager.get().resetAppData();
+        gnStateManager.resetAppData();
 
         StorageActivity.StudentInfo studentInfo = new StorageActivity.StudentInfo();
         studentInfo.name = "abcd";
@@ -61,7 +67,7 @@ public class GNStateManagerTest extends ActivityInstrumentationTestCase2<Storage
         assertEquals(25, studentInfo.age);
 
         //Reset all application entries
-        GNStateManager.get().resetAppData();
+        gnStateManager.resetAppData();
     }
 
     /*
