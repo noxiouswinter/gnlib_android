@@ -56,5 +56,5 @@ dependencies {
 task makeJar(type: Jar) {
     baseName = 'gnlib-android'
     version = 'v1.0.1'
-    from android.sourceSets.main.java
+    from android.sourceSets.main.java.sourceFiles
 }
