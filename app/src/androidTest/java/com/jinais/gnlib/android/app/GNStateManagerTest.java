@@ -18,9 +18,8 @@ package com.jinais.gnlib.android.app;
 
 import android.test.ActivityInstrumentationTestCase2;
 import com.jinais.gnlib.android.app.Storage.StorageActivity;
-import com.jinais.gnlib.android.storage.GNState;
-import com.jinais.gnlib.android.storage.GNStateManager;
-import com.jinais.gnlib.android.storage.GNStateManagerFactory;
+import com.jinais.gnlib.android.state.GNStateManager;
+import com.jinais.gnlib.android.state.GNStateManagerFactory;
 
 /**
  * Created by jkader on 10/29/14.

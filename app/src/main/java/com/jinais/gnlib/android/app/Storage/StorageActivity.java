@@ -23,8 +23,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import com.jinais.gnlib.android.LogGN;
 import com.jinais.gnlib.android.app.R;
-import com.jinais.gnlib.android.storage.GNState;
-import com.jinais.gnlib.android.storage.GNStateManagerFactory;
+import com.jinais.gnlib.android.state.GNState;
+import com.jinais.gnlib.android.state.GNStateManagerFactory;
 
 
 public class StorageActivity extends Activity {

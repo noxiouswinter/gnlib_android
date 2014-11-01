@@ -14,23 +14,16 @@
  * limitations under the License.
  */
 
-package com.jinais.gnlib.android.storage;
+package com.jinais.gnlib.android.state;
 
-import com.google.gson.ExclusionStrategy;
-import com.google.gson.FieldAttributes;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
 /**
  * Created by jkader on 10/11/14.
  */
 
-
-public class GNStateGsonExclusionStrategy implements ExclusionStrategy {
-
-    public boolean shouldSkipClass(Class<?> clazz) {
-        return false;
-    }
-
-    public boolean shouldSkipField(FieldAttributes f) {
-        return f.getAnnotation(GNState.class) == null;
-    }
+@Retention(RetentionPolicy.RUNTIME)
+public @interface GNState {
+    // Field tag only annotation
 }
