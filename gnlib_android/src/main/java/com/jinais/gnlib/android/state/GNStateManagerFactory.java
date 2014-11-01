@@ -14,28 +14,21 @@
  * limitations under the License.
  */
 
-package com.jinais.gnlib.android.storage;
+package com.jinais.gnlib.android.state;
 
 import android.content.Context;
-import android.content.SharedPreferences;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonSyntaxException;
 import com.jinais.gnlib.android.LogGN;
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.List;
 
 public class GNStateManagerFactory {
 
     //Singleton Instance
-    private static GNStateManagerImpl sharedInstance = null;
+    private static GNStateManagerSharedPrefsImpl sharedInstance = null;
 
     /** Get Singleton */
     public static GNStateManager init(Context context) {
 
         if(sharedInstance == null) {
-            sharedInstance = new GNStateManagerImpl(context);
+            sharedInstance = new GNStateManagerSharedPrefsImpl(context);
             return sharedInstance;
         } else {
             LogGN.e("GNStateManagerFactory already init. Use get() to get the GNStateManager");

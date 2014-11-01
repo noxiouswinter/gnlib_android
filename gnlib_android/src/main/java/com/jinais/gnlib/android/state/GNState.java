@@ -14,21 +14,16 @@
  * limitations under the License.
  */
 
-package com.jinais.gnlib.android.storage;
+package com.jinais.gnlib.android.state;
 
-import java.util.List;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
 /**
- * Created by jkader on 10/31/14.
+ * Created by jkader on 10/11/14.
  */
-public interface GNStateManager {
-    void store(Object object);
 
-    void retrieve(Object objectToRetrieve);
-
-    void resetAppData();
-
-    void remove(Object object);
-
-    List<String> getAllPersistedClassCannonicalNames();
+@Retention(RetentionPolicy.RUNTIME)
+public @interface GNState {
+    // Field tag only annotation
 }

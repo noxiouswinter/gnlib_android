@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.jinais.gnlib.android.storage;
+package com.jinais.gnlib.android.state;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -30,7 +30,7 @@ import java.util.List;
 /**
  * Created by jkader on 10/31/14.
  */
-public class GNStateManagerImpl  implements GNStateManager {
+public class GNStateManagerSharedPrefsImpl implements GNStateManager {
 
     private final String gnStateManagerSharedPreferenceId;
     private final Context context;
@@ -38,7 +38,7 @@ public class GNStateManagerImpl  implements GNStateManager {
     @GNState
     private ArrayList<StatePersistenceInfo> statePersistenceInfos = null;
 
-    public GNStateManagerImpl(Context context) {
+    public GNStateManagerSharedPrefsImpl(Context context) {
         this.context = context;
         this.gnStateManagerSharedPreferenceId = "com.jinais.gnlib.android.gnstatemanager:" + context.getApplicationContext().getPackageName();
         statePersistenceInfos = new ArrayList<StatePersistenceInfo>();
