@@ -52,3 +52,9 @@ dependencies {
     compile 'com.android.support:appcompat-v7:21.0.0'
     compile 'com.google.code.gson:gson:1.7.2'
 }
+
+task makeJar(type: Jar) {
+    baseName = 'gnlib-android'
+    version = 'v1.0.1'
+    from android.sourceSets.main.java
+}
