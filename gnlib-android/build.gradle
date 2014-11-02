@@ -64,6 +64,10 @@ group = "com.jinais.gnlib.android"
 archivesBaseName = "gnlib-android"
 version = "v1.0.1"
 
+task generateJavadoc(type: Javadoc) {
+    source = android.sourceSets.main.java.sourceFiles
+}
+
 task sourcesJar(type: Jar) {
     classifier = 'sources'
     baseName = archivesBaseName  //Defined above
