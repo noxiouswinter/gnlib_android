@@ -65,6 +65,7 @@ archivesBaseName = "gnlib-android"
 version = "v1.0.1"
 
 task sourcesJar(type: Jar) {
+    classifier = 'sources'
     baseName = archivesBaseName  //Defined above
 //    version = 'v1.0.1'   defined above
     from android.sourceSets.main.java.sourceFiles
@@ -76,7 +77,7 @@ task sourcesJar(type: Jar) {
 //
 //task javadocJar(type: Jar) {
 //    classifier = 'javadoc'
-//    from javadoc
+//    from file("./build/docs/javadoc")
 //}
 //
 //artifacts {
