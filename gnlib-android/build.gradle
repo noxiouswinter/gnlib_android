@@ -60,9 +60,9 @@ dependencies {
 apply plugin: 'maven'
 apply plugin: 'signing'
 
-group = "com.jinais.gnlib.android"
+group = "com.jinais.code.android.gnlib"
 archivesBaseName = "gnlib-android"
-version = "v1.0.1"
+version = "1.0.1"
 
 task generateJavadoc(type: Javadoc) {
     source = android.sourceSets.main.java.sourceFiles
@@ -75,65 +75,65 @@ task sourcesJar(type: Jar) {
     from android.sourceSets.main.java.sourceFiles
 }
 
-//
+
 //http://central.sonatype.org/pages/ossrh-guide.html#create-a-ticket-with-sonatype
 //http://central.sonatype.org/pages/requirements.html
-//
-//task javadocJar(type: Jar) {
-//    classifier = 'javadoc'
-//    from file("./build/docs/javadoc")
-//}
-//
-//artifacts {
-//    archives sourcesJar, javadocJar
-//}
-//
-//signing {
-//    sign configurations.archives
-//}
-//
-//uploadArchives {
-//    repositories {
-//        mavenDeployer {
-//            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
-//
-//            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
-//                authentication(userName: ossrhUsername, password: ossrhPassword)
-//            }
-//
-//            snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
-//                authentication(userName: ossrhUsername, password: ossrhPassword)
-//            }
-//
-//            pom.project {
-//                name 'Example Application'
-//                packaging 'jar'
-//                // optionally artifactId can be defined here
-//                description 'A application used as an example on how to set up pushing  its components to the Central Repository.'
-//                url 'http://www.example.com/example-application'
-//
-//                scm {
-//                    connection 'scm:svn:http://foo.googlecode.com/svn/trunk/'
-//                    developerConnection 'scm:svn:https://foo.googlecode.com/svn/trunk/'
-//                    url 'http://foo.googlecode.com/svn/trunk/'
-//                }
-//
-//                licenses {
-//                    license {
-//                        name 'The Apache License, Version 2.0'
-//                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-//                    }
-//                }
-//
-//                developers {
-//                    developer {
-//                        id 'manfred'
-//                        name 'Manfred Moser'
-//                        email 'manfred@sonatype.com'
-//                    }
-//                }
-//            }
-//        }
-//    }
-//}
+
+task javadocJar(type: Jar) {
+    classifier = 'javadoc'
+    from file("./build/docs/javadoc")
+}
+
+artifacts {
+    archives sourcesJar, javadocJar
+}
+
+signing {
+    sign configurations.archives
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+                authentication(userName: ossrhUsername, password: ossrhPassword)
+            }
+
+            snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+                authentication(userName: ossrhUsername, password: ossrhPassword)
+            }
+
+            pom.project {
+                name 'GnLib Android'
+                packaging 'jar'
+                // optionally artifactId can be defined here
+                description 'GNLib is an Android utilities library project aimed at identifying and solving some of the common tasks/issues every android application developer has to tackle frequently.'
+                url 'https://github.com/noxiouswinter/gnlib_android'
+
+                scm {
+                    connection 'scm:git@github.com:noxiouswinter/gnlib_android.git'
+                    developerConnection 'scm:git@github.com:noxiouswinter/gnlib_android.git'
+                    url 'git@github.com:noxiouswinter/gnlib_android.git'
+                }
+
+                licenses {
+                    license {
+                        name 'The Apache License, Version 2.0'
+                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+
+                developers {
+                    developer {
+                        id 'jinaispk@gmail.com'
+                        name 'Jinais Ponnampadikkal Kader'
+                        email 'jinaispk@gmail.com'
+                    }
+                }
+            }
+        }
+    }
+}
 
