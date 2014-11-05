@@ -60,7 +60,7 @@ dependencies {
 apply plugin: 'maven'
 apply plugin: 'signing'
 
-group = "com.jinais.code.android.gnlib"
+group = "com.jinais.android"
 archivesBaseName = "gnlib-android"
 version = "1.0.1"
 
