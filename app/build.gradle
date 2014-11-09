@@ -26,6 +26,12 @@ apply plugin: 'com.android.application'
 
 repositories {
     jcenter()
+
+    maven {
+//        url "https://oss.sonatype.org/content/repositories/releases"
+        url "https://oss.sonatype.org/content/groups/public/"
+    }
+
 }
 
 android {
@@ -52,4 +58,5 @@ dependencies {
     compile 'com.android.support:support-v4:21.0.0'
     compile 'com.android.support:appcompat-v7:21.0.0'
     compile 'com.google.code.gson:gson:1.7.2'
+    compile 'com.jinais.android:gnlib-android:1.0.1+@jar'
 }
