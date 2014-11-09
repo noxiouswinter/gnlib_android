@@ -84,8 +84,12 @@ task javadocJar(type: Jar) {
     from file("./build/docs/javadoc")
 }
 
+task coreLibJar(type: Jar) {
+    from fileTree(dir: 'build/intermediates/classes/release').matching { include 'com/jinais/gnlib/android/**' }
+}
+
 artifacts {
-    archives sourcesJar, javadocJar
+    archives coreLibJar, sourcesJar, javadocJar
 }
 
 signing {
@@ -104,6 +108,8 @@ uploadArchives {
             snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
                 authentication(userName: ossrhUsername, password: ossrhPassword)
             }
+
+//            repository(url: "file:///Users/jkader/TEMPREPO")
 
             pom.project {
                 name 'GnLib Android'
@@ -136,4 +142,37 @@ uploadArchives {
         }
     }
 }
+
+
+
+//configurations {
+//
+//    runtime {
+//        artifacts.removeAll { it.archiveTask.is aar }
+//    }
+//}
+
+
+
+
+//uploadArchives {
+//    repositories {
+//        mavenDeployer {
+//            repository(url: "file:///Users/jkader/TEMPREPO")
+//            pom.groupId = 'com.mycompany.lib'
+//            pom.artifactId = 'core-lib'
+//            pom.version = '0.1.0'
+//
+////            addFilter('daar') {artifact, file ->
+////                artifact.name.contains('.aar') == false
+////            }
+//
+//        }
+//    }
+//}
+
+
+
+//configurations.apk.artifacts.removeAll { it.archiveTask.is aar }
+//configurations.runtime.artifacts.removeAll { it.archiveTask.is aar }
 
