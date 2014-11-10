@@ -27,10 +27,11 @@ apply plugin: 'com.android.application'
 repositories {
     jcenter()
 
-    maven {
-//        url "https://oss.sonatype.org/content/repositories/releases"
-        url "https://oss.sonatype.org/content/groups/public/"
-    }
+//    maven {
+////        url "https://oss.sonatype.org/content/repositories/releases"
+////        url "https://oss.sonatype.org/content/groups/public/"
+////        url "file://~/TEMPREPO"
+//    }
 
 }
 
