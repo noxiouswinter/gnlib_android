@@ -53,8 +53,6 @@ dependencies {
     compile 'com.google.code.gson:gson:1.7.2'
 }
 
-
-
 // Exportingand Deploying jar
 
 apply plugin: 'maven'
@@ -143,17 +141,12 @@ uploadArchives {
     }
 }
 
-
-
 //configurations {
 //
 //    runtime {
 //        artifacts.removeAll { it.archiveTask.is aar }
 //    }
 //}
-
-
-
 
 //uploadArchives {
 //    repositories {
@@ -170,8 +163,6 @@ uploadArchives {
 //        }
 //    }
 //}
-
-
 
 //configurations.apk.artifacts.removeAll { it.archiveTask.is aar }
 //configurations.runtime.artifacts.removeAll { it.archiveTask.is aar }
