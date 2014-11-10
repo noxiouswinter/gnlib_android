@@ -1,7 +1,7 @@
 gnlib_android
 =============
 
-GNLib is an Android utilities library project aimed at identifying and solving some of the common tasks/issues every android application developer has to tackle frequently. The first version of the library features the GNLauncher and the GNStateManager.
+GNLib is an Android utilities library project aimed at identifying and solving some of the common tasks/issues every Android application developer has to tackle frequently. The first version of the library features the GNLauncher and the GNStateManager.
 
 <b>GNLauncher</b> makes sending objects/data to an Activity from another Activity etc as easy as calling a function in tha Activity with the required data as parameters. It introduces type safety and removes all the hastles of having to serialize, attaching to the intent using string keys and undoing the same at the other end.
 
