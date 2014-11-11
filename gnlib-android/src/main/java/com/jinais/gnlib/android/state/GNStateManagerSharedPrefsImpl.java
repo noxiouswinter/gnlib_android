@@ -35,6 +35,8 @@ public class GNStateManagerSharedPrefsImpl implements GNStateManager {
     private final String gnStateManagerSharedPreferenceId;
     private final Context context;
 
+    private final GNStateGsonHelper gnStateGsonHelper;
+
     @GNState
     private ArrayList<StatePersistenceInfo> statePersistenceInfos = null;
 
@@ -42,6 +44,7 @@ public class GNStateManagerSharedPrefsImpl implements GNStateManager {
         this.context = context;
         this.gnStateManagerSharedPreferenceId = "com.jinais.gnlib.android.gnstatemanager:" + context.getApplicationContext().getPackageName();
         statePersistenceInfos = new ArrayList<StatePersistenceInfo>();
+        gnStateGsonHelper = new GNStateGsonHelper();
         //Retrieve the state of GNStateManagerImpl
         retrieve(this);
     }
@@ -50,10 +53,7 @@ public class GNStateManagerSharedPrefsImpl implements GNStateManager {
     @Override
     public void store(Object object) {
         Class objectClass = object.getClass();
-        Gson gson = new GsonBuilder()
-                .setExclusionStrategies(new GNStateGsonExclusionStrategy())
-                .create();
-        String jsonString = gson.toJson(object, objectClass);
+        String jsonString = gnStateGsonHelper.getStateJsonString(object);
 
         SharedPreferences sharedPreferences = context.getSharedPreferences(gnStateManagerSharedPreferenceId, Context.MODE_PRIVATE);
         sharedPreferences.edit().putString(objectClass.getCanonicalName(), jsonString).apply();
@@ -100,20 +100,7 @@ public class GNStateManagerSharedPrefsImpl implements GNStateManager {
         String jsonString = sharedPreferences.getString(objectClassCanonicalName, "");
         if(jsonString.equals("")) return;
 
-        Gson gson = new Gson();
-        Object duplicateObject;
-        try {
-            duplicateObject = gson.fromJson(jsonString, objectClass);
-        } catch (JsonSyntaxException e) {
-            LogGN.e(e, "Failed to parse Json String: ", jsonString);
-            return;
-        }
-
-        try {
-            copyObjectAnnotatedFields(duplicateObject, objectToRetrieve);
-        } catch (IllegalAccessException e) {
-            LogGN.e(e);
-        }
+        gnStateGsonHelper.injectStateFromJson(objectToRetrieve, jsonString);
     }
 
     /** Clear all GNStateManager's data from SharedPreferences. */
@@ -148,53 +135,6 @@ public class GNStateManagerSharedPrefsImpl implements GNStateManager {
             persistedClassCannonicalNames.add(statePersistenceInfo.getComponentClassCanonicalName());
         }
         return persistedClassCannonicalNames;
-    }
-
-    /** Copies fields marked with @GNState from first object to the second. All custom classes and their state fields should
-     * be marked with the annotation too.*/
-    private void copyObjectAnnotatedFields(Object objectToCopyFrom, Object objectToCopyTo) throws IllegalAccessException {
-
-        if(objectToCopyFrom == null) {
-            LogGN.e("objectToCopyFrom is null!");
-            return;
-        }
-
-        for(Field field: objectToCopyFrom.getClass().getDeclaredFields()) {
-            //If Field is annotated with GNState,
-            if(field.getAnnotation(GNState.class) != null) {
-
-                //If class(Type) of field is marked with GNState annotation, drill down.
-                if(field.getType().getAnnotation(GNState.class) != null) {
-                    //Override field access restrictions
-                    field.setAccessible(true);
-
-                    //If the field is null, instantiate an object of it's class and assign the field with it.
-                    if(field.get(objectToCopyTo) == null) {
-                        LogGN.d("Field ", field.getName(), " is null. Instantiating..");
-                        Object newFieldObject;
-                        try {
-                            newFieldObject = field.getType().newInstance();
-                        } catch (InstantiationException e) {
-                            LogGN.e(e, "Instantiation of Field Type ", field.getType(), " for field ", field.getName(), " failed!");
-                            return;
-                        }
-                        if(newFieldObject != null) {
-                            field.set(objectToCopyTo, newFieldObject);
-                        }
-                    }
-                    //Recurse.
-                    copyObjectAnnotatedFields(field.get(objectToCopyFrom), field.get(objectToCopyTo));
-                    //Put back access restrictions for the field.
-                    field.setAccessible(false);
-
-                } else { //Else Just copy the reference
-                    field.setAccessible(true);
-                    Object fieldObjectToCopyFrom = field.get(objectToCopyFrom);
-                    field.set(objectToCopyTo, fieldObjectToCopyFrom);
-                    field.setAccessible(false);
-                }
-            }
-        }
     }
 
     @GNState
