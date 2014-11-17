@@ -28,6 +28,8 @@ import java.lang.reflect.Field;
  */
 public class GNStateGsonHelper {
 
+    /**@param object The object with state fields marked with @GNState.
+     * @return Json string including fields marked with @GNState of object. */
     public String getStateJsonString(Object object) {
         String jsonString = null;
         Class objectClass = object.getClass();
@@ -38,8 +40,9 @@ public class GNStateGsonHelper {
         return jsonString;
     }
 
+    /**@param object Object into which fields marked with GNState will be injected into.
+     * @param jsonString Json representation of values of fields marked with @GNState to be injected into.*/
     public void injectStateFromJson(Object object, String jsonString) {
-
         Class objectClass = object.getClass();
 
         Gson gson = new Gson();
