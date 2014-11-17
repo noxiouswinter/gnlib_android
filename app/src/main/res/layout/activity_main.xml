@@ -43,4 +43,16 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:onClick="onLauncherActivityClick"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="History Activity"
+        android:id="@+id/bHistoryActivity"
+        android:layout_below="@+id/bLauncherActivity"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:onClick="onHistoryActivityClick"/>
+
+
 </RelativeLayout>

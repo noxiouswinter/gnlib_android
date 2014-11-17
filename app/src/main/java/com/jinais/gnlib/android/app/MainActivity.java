@@ -20,6 +20,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import com.jinais.gnlib.android.app.History.HistoryActivity;
 import com.jinais.gnlib.android.app.Launcher.LauncherActivity_1;
 import com.jinais.gnlib.android.app.Storage.StorageActivity;
 
@@ -39,6 +40,11 @@ public class MainActivity extends Activity {
 
     public void onLauncherActivityClick(View view) {
         Intent intent = new Intent(this, LauncherActivity_1.class);
+        startActivity(intent);
+    }
+
+    public void onHistoryActivityClick(View view) {
+        Intent intent = new Intent(this, HistoryActivity.class);
         startActivity(intent);
     }
 }
