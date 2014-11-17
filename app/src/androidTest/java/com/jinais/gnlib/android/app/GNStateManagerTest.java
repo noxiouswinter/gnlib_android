@@ -70,6 +70,7 @@ public class GNStateManagerTest extends ActivityInstrumentationTestCase2<Storage
     }
 
     /*
+    //TODO Implement tests for the following.
       Yet to implement tests for
       getAllPersistedClassCannonicalNames
       remove

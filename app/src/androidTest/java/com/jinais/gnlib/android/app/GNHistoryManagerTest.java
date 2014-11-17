@@ -16,27 +16,31 @@
 
 package com.jinais.gnlib.android.app;
 
-import android.test.AndroidTestCase;
+import android.content.Context;
+import android.test.InstrumentationTestCase;
 import com.jinais.gnlib.android.state.GNState;
+import com.jinais.gnlib.android.state.GNStateManagerFactory;
 import com.jinais.gnlib.android.state.history.GNHistoryManager;
 import com.jinais.gnlib.android.state.history.GNHistoryManagerFactory;
 
 /**
  * Created by jkader on 11/11/14.
  */
-public class GNHistoryManagerTest extends AndroidTestCase {
+public class GNHistoryManagerTest extends InstrumentationTestCase {
+
+    Context applicationContext;
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
 
-        //Placeholder        
+        applicationContext = this.getInstrumentation().getTargetContext().getApplicationContext();
     }
 
     public void testStepInStepOut() {
 
         GNHistoryManagerFactory.clearSingleton();
-        GNHistoryManager historyManager = GNHistoryManagerFactory.get();
+        GNHistoryManager historyManager = GNHistoryManagerFactory.init(applicationContext);
 
         HistoryManagerClient historyManagerClient = new HistoryManagerClient();
         historyManagerClient.setName("abc");
@@ -61,7 +65,7 @@ public class GNHistoryManagerTest extends AndroidTestCase {
     public void testGetHistorySizeAndCurrentPositionInHistory() {
 
         GNHistoryManagerFactory.clearSingleton();
-        GNHistoryManager historyManager = GNHistoryManagerFactory.get();
+        GNHistoryManager historyManager = GNHistoryManagerFactory.init(applicationContext);
 
         HistoryManagerClient historyManagerClient = new HistoryManagerClient();
 
@@ -88,7 +92,8 @@ public class GNHistoryManagerTest extends AndroidTestCase {
     public void testStepBackStepForwardAndCurrentPositionPositionInHistory() {
 
         GNHistoryManagerFactory.clearSingleton();
-        GNHistoryManager historyManager = GNHistoryManagerFactory.get();
+        GNStateManagerFactory.init(applicationContext).resetAppData();
+        GNHistoryManager historyManager = GNHistoryManagerFactory.init(applicationContext);
 
         HistoryManagerClient historyManagerClient = new HistoryManagerClient();
         Integer currentPositionInHistory;
@@ -146,7 +151,8 @@ public class GNHistoryManagerTest extends AndroidTestCase {
     public void testStepIntoStepOutOfHistory() {
 
         GNHistoryManagerFactory.clearSingleton();
-        GNHistoryManager historyManager = GNHistoryManagerFactory.get();
+        GNStateManagerFactory.init(applicationContext).resetAppData();
+        GNHistoryManager historyManager = GNHistoryManagerFactory.init(applicationContext);
 
         HistoryManagerClient historyManagerClient = new HistoryManagerClient();
         Integer currentPositionInHistory;
@@ -203,6 +209,8 @@ public class GNHistoryManagerTest extends AndroidTestCase {
         assertEquals(40, historyManagerClient.getAge() );
 
     }
+
+    //TODO write tests for clearBefore and ClearAfter methods.
 }
 
 class HistoryManagerClient {

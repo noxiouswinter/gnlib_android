@@ -51,6 +51,9 @@ public interface GNHistoryManager {
      * this will be null when the state of the object is current.*/
     public Integer getCurrentPositionInHistory(Class objectClass);
 
+    /**Helpful function to reset current state to current position in history. Eg: in OnCreate.*/
+    public boolean stepIntoCurrentPositionInHistory(Object object);
+
     /**@return true if an entry was removed.
      * Removes all history entries of the given class. */
     public Boolean clearHistory(Class objectClass);

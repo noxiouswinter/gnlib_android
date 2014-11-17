@@ -16,8 +16,12 @@
 
 package com.jinais.gnlib.android.state.history;
 
+import android.content.Context;
 import com.jinais.gnlib.android.LogGN;
+import com.jinais.gnlib.android.state.GNState;
 import com.jinais.gnlib.android.state.GNStateGsonHelper;
+import com.jinais.gnlib.android.state.GNStateManager;
+import com.jinais.gnlib.android.state.GNStateManagerFactory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,12 +33,21 @@ import java.util.Map;
  */
 public class GNHistoryManagerImpl implements GNHistoryManager {
 
+    @GNState
     Map<String, HistoryInfo> historyInfoLists;
     GNStateGsonHelper gnStateGsonHelper;
+    GNStateManager gnStateManager;
+    Context context;
 
-    public GNHistoryManagerImpl() {
+    public GNHistoryManagerImpl(Context context) {
+        this.context = context;
+
         this.historyInfoLists = new HashMap<String, HistoryInfo>();
         gnStateGsonHelper = new GNStateGsonHelper();
+
+        gnStateManager = GNStateManagerFactory.init(context);
+        //Retrieve state of the HistoryManager.
+        gnStateManager.retrieve(this);
     }
 
     /**@inheritDoc*/
@@ -54,6 +67,9 @@ public class GNHistoryManagerImpl implements GNHistoryManager {
         List<StateInfo> stateInfos = historyInfo.getStateInfos();
         String objectStateJsonString = gnStateGsonHelper.getStateJsonString(object);
         stateInfos.add(new StateInfo(objectStateJsonString));
+
+        //Persist state of the HistoryManager.
+        gnStateManager.store(this);
     }
 
     /**@inheritDoc*/
@@ -99,6 +115,9 @@ public class GNHistoryManagerImpl implements GNHistoryManager {
         String objectStateJsonString = stateInfo.getJsonString();
         gnStateGsonHelper.injectStateFromJson(object, objectStateJsonString);
         historyInfo.setCurrentPositionInHistory(position);
+
+        //Persist state of the HistoryManager.
+        gnStateManager.store(this);
     }
 
     /**@inheritDoc*/
@@ -116,6 +135,9 @@ public class GNHistoryManagerImpl implements GNHistoryManager {
         //Set the state back from cachedTempState.
         gnStateGsonHelper.injectStateFromJson(object, historyInfo.getTempCurrentStateInfo().getJsonString());
         historyInfo.setCurrentPositionInHistory(null);
+
+        //Persist state of the HistoryManager.
+        gnStateManager.store(this);
     }
 
     /**@inheritDoc*/
@@ -152,6 +174,8 @@ public class GNHistoryManagerImpl implements GNHistoryManager {
             StateInfo stateInfo =  stateInfos.get(stateInfos.size() - 1);
             gnStateGsonHelper.injectStateFromJson(object, stateInfo.getJsonString());
             historyInfo.setCurrentPositionInHistory(stateInfos.size());
+            //Persist state of the HistoryManager.
+            gnStateManager.store(this);
             return true;
         }
 
@@ -161,6 +185,8 @@ public class GNHistoryManagerImpl implements GNHistoryManager {
             StateInfo stateInfoOneBeforeCurrent =  stateInfos.get(currentPositionInHistory - 2);
             gnStateGsonHelper.injectStateFromJson(object, stateInfoOneBeforeCurrent.getJsonString());
             historyInfo.setCurrentPositionInHistory(currentPositionInHistory-1);
+            //Persist state of the HistoryManager.
+            gnStateManager.store(this);
             return true;
         }
         return false;
@@ -194,6 +220,8 @@ public class GNHistoryManagerImpl implements GNHistoryManager {
             gnStateGsonHelper.injectStateFromJson(object, historyInfo.getTempCurrentStateInfo().getJsonString());
             historyInfo.setTempCurrentStateInfo(null);
             historyInfo.setCurrentPositionInHistory(null);
+            //Persist state of the HistoryManager.
+            gnStateManager.store(this);
             return true;
         }
 
@@ -201,6 +229,9 @@ public class GNHistoryManagerImpl implements GNHistoryManager {
         StateInfo stateInfoOneAfterCurrent =  stateInfos.get(historyInfo.getCurrentPositionInHistory());
         gnStateGsonHelper.injectStateFromJson(object, stateInfoOneAfterCurrent.getJsonString());
         historyInfo.setCurrentPositionInHistory(historyInfo.getCurrentPositionInHistory() + 1);
+
+        //Persist state of the HistoryManager.
+        gnStateManager.store(this);
         return true;
     }
 
@@ -226,6 +257,8 @@ public class GNHistoryManagerImpl implements GNHistoryManager {
             return false;
         }
         historyInfoLists.remove(objectClassCanonicalName);
+        //Persist state of the HistoryManager.
+        gnStateManager.store(this);
         return true;
     }
 
@@ -256,6 +289,8 @@ public class GNHistoryManagerImpl implements GNHistoryManager {
         }
         //Replace with the new list.
         historyInfo.setStateInfos(tempStateInfos);
+        //Persist state of the HistoryManager.
+        gnStateManager.store(this);
         return true;
     }
 
@@ -286,12 +321,41 @@ public class GNHistoryManagerImpl implements GNHistoryManager {
         }
         //Replace with the new list.
         historyInfo.setStateInfos(tempStateInfos);
+        //Persist state of the HistoryManager.
+        gnStateManager.store(this);
+        return true;
+    }
+
+    @Override
+    public boolean stepIntoCurrentPositionInHistory(Object object) {
+        String objectClassCanonicalName = object.getClass().getCanonicalName();
+        HistoryInfo historyInfo = historyInfoLists.get(objectClassCanonicalName);
+        if(historyInfo == null) {
+            LogGN.d("GNHistoryManager.clearHistoryAfter: the class does not have any record in historyInfoLists.");
+            return false;
+        }
+
+        if(historyInfo.getCurrentPositionInHistory() == null) {
+            LogGN.d("GNHistoryManager.stepIntoCurrentPositionInHistory: Currently not in history.");
+            return false;
+        }
+
+        List<StateInfo> stateInfos = historyInfo.getStateInfos();
+        if(stateInfos == null) {
+            LogGN.d("GNHistoryManager.clearHistoryAfter: stateInfos is null");
+            return false;
+        }
+
+        StateInfo stateInfo = stateInfos.get(historyInfo.getCurrentPositionInHistory() - 1);
+        gnStateGsonHelper.injectStateFromJson(object, stateInfo.getJsonString());
         return true;
     }
 }
 
+@GNState
 class StateInfo {
 
+    @GNState
     String jsonString;
 
     StateInfo(String jsonString) {
@@ -308,13 +372,15 @@ class StateInfo {
 
 class HistoryInfo {
 
+    @GNState
     List<StateInfo> stateInfos;
+    @GNState
     Integer currentPositionInHistory;
+    @GNState
     StateInfo tempCurrentStateInfo;
 
     HistoryInfo(List<StateInfo> stateInfos) {
         this.stateInfos = stateInfos;
-
     }
 
     public Integer getCurrentPositionInHistory() {

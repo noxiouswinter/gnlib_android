@@ -28,7 +28,7 @@ public interface GNStateManager {
 
     void resetAppData();
 
-    void remove(Object object);
+    void remove(Class objectClass);
 
     List<String> getAllPersistedClassCannonicalNames();
 }

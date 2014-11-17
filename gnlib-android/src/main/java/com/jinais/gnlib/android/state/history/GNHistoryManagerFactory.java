@@ -16,16 +16,32 @@
 
 package com.jinais.gnlib.android.state.history;
 
+import android.content.Context;
+import com.jinais.gnlib.android.LogGN;
+
 /**
  * Created by jkader on 11/11/14.
  */
 public class GNHistoryManagerFactory {
 
+    private static Context cachedContext;
     private static GNHistoryManager gnHistoryManager = null;
+
+    public static GNHistoryManager init(Context context) {
+        cachedContext = context;
+        if(gnHistoryManager == null) {
+            gnHistoryManager = new GNHistoryManagerImpl(cachedContext);
+        }
+        return gnHistoryManager;
+    }
 
     public static GNHistoryManager get() {
         if(gnHistoryManager == null) {
-            gnHistoryManager = new GNHistoryManagerImpl();
+            if(cachedContext == null){
+                LogGN.e("cachedContext is null. Call init with context first.");
+                return null;
+            }
+            gnHistoryManager = new GNHistoryManagerImpl(cachedContext);
         }
         return gnHistoryManager;
     }

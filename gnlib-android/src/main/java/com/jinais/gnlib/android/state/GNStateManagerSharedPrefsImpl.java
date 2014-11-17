@@ -111,9 +111,11 @@ public class GNStateManagerSharedPrefsImpl implements GNStateManager {
 
     /** Remove data of provided object's class from GNStateManager and the SharedPrefs entries. */
     @Override
-    public void remove(Object object) {
-        Class componentClass = object.getClass();
-        String componentClassCanonicalName =  componentClass.getCanonicalName();
+    public void remove(Class objectClass) {
+
+        //TODO  this might be buggy. Testing required.
+
+        String componentClassCanonicalName =  objectClass.getCanonicalName();
         int indexInStatePersistenceInfos = indexInPersistenceInfos(componentClassCanonicalName);
 
         if(indexInStatePersistenceInfos != -1) {
@@ -124,7 +126,7 @@ public class GNStateManagerSharedPrefsImpl implements GNStateManager {
             store(this);
 
         } else {
-            LogGN.d("GNStateManager.remove: ", componentClass.getCanonicalName(), " is not present in statePersistenceInfos");
+            LogGN.d("GNStateManager.remove: ", objectClass.getCanonicalName(), " is not present in statePersistenceInfos");
         }
     }
 

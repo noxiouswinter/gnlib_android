@@ -29,11 +29,10 @@ public class GNStateManagerFactory {
 
         if(sharedInstance == null) {
             sharedInstance = new GNStateManagerSharedPrefsImpl(context);
-            return sharedInstance;
         } else {
             LogGN.e("GNStateManagerFactory already init. Use get() to get the GNStateManager");
-            return null;
         }
+        return sharedInstance;
     }
 
     public static GNStateManager get() {
