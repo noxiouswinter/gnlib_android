@@ -48,7 +48,13 @@ public class HistoryActivity extends Activity {
         setContentView(R.layout.activity_history);
         initializeViews();
 
-        gnHistoryManager = GNHistoryManagerFactory.get();
+        gnHistoryManager = GNHistoryManagerFactory.init(this);
+
+        //Reset state to current position in history.
+        if(gnHistoryManager.stepIntoCurrentPositionInHistory(this)) {
+            updateViewsFromState();
+        }
+
         setHistoryStatusViews();
     }
 
