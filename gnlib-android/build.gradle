@@ -53,14 +53,14 @@ dependencies {
     compile 'com.google.code.gson:gson:1.7.2'
 }
 
-// Exportingand Deploying jar
+// Exporting and Deploying jar
 
 apply plugin: 'maven'
 apply plugin: 'signing'
 
 group = "com.jinais.android"
 archivesBaseName = "gnlib-android"
-version = "1.0.1"
+version = "1.1.0"
 
 task generateJavadoc(type: Javadoc) {
     source = android.sourceSets.main.java.sourceFiles
