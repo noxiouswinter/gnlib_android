@@ -83,7 +83,7 @@ task javadocJar(type: Jar) {
 }
 
 task coreLibJar(type: Jar) {
-    from fileTree(dir: 'build/intermediates/classes/release').matching { include 'com/jinais/gnlib/android/**' }
+    from fileTree(dir: 'build/intermediates/classes/release').matching { include 'com/jinais/gnlib/android/**' exclude 'com/jinais/gnlib/android/R$*.class' exclude 'com/jinais/gnlib/android/R.class'}
 }
 
 artifacts {
