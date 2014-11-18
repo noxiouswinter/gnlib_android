@@ -25,12 +25,16 @@ buildscript {
 apply plugin: 'com.android.application'
 
 repositories {
-    jcenter()
+//    jcenter()
+
+    mavenCentral()
 
 //    maven {
-////        url "https://oss.sonatype.org/content/repositories/releases"
-////        url "https://oss.sonatype.org/content/groups/public/"
-////        url "file://$System.env.HOME/TEMPREPO"
+//        //Sonatype's release repo synched to maven central.
+//        url "https://oss.sonatype.org/content/repositories/releases"
+//        //Sonatype's Snapshot repo
+//        url "https://oss.sonatype.org/content/groups/public/"
+//        url "file://$System.env.HOME/TEMPREPO"
 //    }
 
 }
@@ -59,5 +63,5 @@ dependencies {
     compile 'com.android.support:support-v4:21.0.0'
     compile 'com.android.support:appcompat-v7:21.0.0'
     compile 'com.google.code.gson:gson:1.7.2'
-//    compile 'com.jinais.android:gnlib-android:1.1.0+@jar'
+    compile 'com.jinais.android:gnlib-android:1.1.0+@jar'
 }
