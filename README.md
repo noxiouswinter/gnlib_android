@@ -1,6 +1,6 @@
 gnlib_android
 =============
-<a href ='https://github.com/noxiouswinter/gnlib_android/wiki'>Please see the WIKI</a> 
+<a href ='https://github.com/noxiouswinter/gnlib_android/wiki'>Please see the WIKI for more details.</a> 
 
 GNLib is an Android utilities library project aimed at identifying and solving some of the common tasks/issues every Android application developer has to tackle frequently. The library features the <b>GNLauncher, GNStateManager, GNHistoryManager</b> etc.
 
