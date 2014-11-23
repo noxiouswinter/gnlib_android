@@ -370,6 +370,7 @@ class StateInfo {
     }
 }
 
+@GNState
 class HistoryInfo {
 
     @GNState
