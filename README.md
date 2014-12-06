@@ -1,8 +1,7 @@
-gnlib_android
+gnlib-android
 =============
 <a href ='https://github.com/noxiouswinter/gnlib_android/wiki'>Please see the WIKI for more details.</a> 
 
-GNLib is an Android utilities library project aimed at identifying and solving some of the common tasks/issues every Android application developer has to tackle frequently. The library features the <b>GNLauncher, GNStateManager, GNHistoryManager</b> etc.
+**GNLib** is an Android library which contains useful utilities that makes Android application development easier for the typical developer. For example the [GNLauncher](https://github.com/noxiouswinter/gnlib_android/wiki/GNLauncher) can be used to launch another Activity almost as easily as calling into a function defined on that Activity. You don't have to serialize objects, attach them to the intent and deserialize on the other end etc. The [GNStateManager](https://github.com/noxiouswinter/gnlib_android/wiki/GNStateManager) will JSON-ify and store the fields of your Activity marked with the @GNState annotation to the SharedPreferences and retrieve them at your command. 
 
-The <b>master</b> branch has the gnlib-android module with the source code with tests and the <b>sample_application</b> branch contains a working example of these features and using the <b>gnlib-android jar</b>. Please see the <b><a href = 'https://github.com/noxiouswinter/gnlib_android/releases'>releases page</a></b> for the jars.
-Please note that <b>GNLib has a dependency on the Gson 1.7.2 library</b>. <a href ='https://github.com/noxiouswinter/gnlib_android/wiki'>Please see the WIKI</a> for detailed instructions on setup and usage.
+[Setup](https://github.com/noxiouswinter/gnlib_android/wiki/Setup) page has instructions on setting up a project to use the GNLib library. [Releases](https://github.com/noxiouswinter/gnlib_android/releases) page has all the the jars.
